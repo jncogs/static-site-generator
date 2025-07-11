@@ -26,8 +26,14 @@ class HTMLNode:
         if self.value:
             output.append(f"Value: {self.value}")
         if self.children:
-            output.append(f"Children: {self.children}")
+            output.append("Children:")
+            for child in self.children:
+                output.append(f"\t{self.children.index(child)}: {child}")
+            #output.append(f"Children: {self.children}")
         if self.props:
-            output.append(f"Props: {self.props}")
+            output.append("Props:")
+            #output.append(f"Props: {self.props}")
+            for prop in self.props:
+                output.append(f"\t{prop}: {self.props[prop]}")
         
         return "\n".join(output)
