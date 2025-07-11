@@ -1,0 +1,33 @@
+class HTMLNode:
+    def __init__(self, tag=None, value=None, children=None, props=None):
+        self.tag = tag
+        self.value = value
+        self.children = children
+        self.props = props
+    
+    def to_html(self):
+        raise NotImplementedError
+    
+    def props_to_html(self):
+        output_list = []
+
+        if self.props:
+            for prop in self.props:
+                key = prop
+                value = self.props[key]
+                output_list.append(f"{key}=\"{value}\"")
+        
+        return " ".join(output_list)
+
+    def __repr__(self):
+        output = []
+        if self.tag:
+            output.append(f"Tag: {self.tag}")
+        if self.value:
+            output.append(f"Value: {self.value}")
+        if self.children:
+            output.append(f"Children: {self.children}")
+        if self.props:
+            output.append(f"Props: {self.props}")
+        
+        return "\n".join(output)
