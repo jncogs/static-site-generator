@@ -1,7 +1,7 @@
 import unittest
 
 from textnode import TextNode, TextType
-from main import text_node_to_html_node
+from nodefunctions import text_node_to_html_node
 
 class TestText2HTML(unittest.TestCase):
     def test_text(self):
@@ -49,10 +49,13 @@ class TestText2HTML(unittest.TestCase):
     
     def test_unknown_type(self):
         print("***Test Unknown Type***")
-        node = TextNode("This will not be a real type", "JNCType")
-        with self.assertRaises(Exception) as cm:
+        with self.assertRaises(TypeError) as te:            
+            node = TextNode("This will not be a real type", "JNCType")
+        self.assertEqual(str(te.exception), "JNCType is not a proper TextType")
+
+        '''with self.assertRaises(Exception) as cm:
             html_node = text_node_to_html_node(node)
-        self.assertEqual(str(cm.exception), "Unknown Text Type")
+        self.assertEqual(str(cm.exception), "Unknown Text Type")'''
 
 if __name__ == "__main__":
     print("----TEST TEXT TO HTML-----")

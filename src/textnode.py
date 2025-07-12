@@ -11,7 +11,10 @@ class TextType(Enum):
 class TextNode:
     def __init__(self, text, text_type, url=None):
         self.text = text
-        self.text_type = text_type
+        if type(text_type) != TextType:
+            raise TypeError(f"{text_type} is not a proper TextType")
+        else:
+            self.text_type = TextType(text_type)
         self.url = url
     
     def __eq__(self, other):
