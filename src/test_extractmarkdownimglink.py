@@ -57,7 +57,7 @@ class TestExtractMarkdown(unittest.TestCase):
         for n in new_nodes:
             html_node = text_node_to_html_node(n)
             output.append(html_node.to_html())
-        print("".join(output))
+        #print("".join(output))
         self.assertEqual("".join(output), 'This is text with a link <a href="https://www.boot.dev">to boot dev</a> and <a href="https://www.youtube.com/@bootdotdev">to youtube</a>')
 
 if __name__ == "__main__":
