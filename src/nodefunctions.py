@@ -1,3 +1,5 @@
+import re
+
 from textnode import TextNode, TextType
 from leafnode import LeafNode
 from link_leafnode import LinkLeafNode
@@ -24,14 +26,9 @@ def text_node_to_html_node(text_node):
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
 
-    match (delimiter):
-        case ("**"):
-            insert_type = TextType.BOLD
-        case ("_"):
-            insert_type = TextType.ITALIC
-        case ("`"):
-            insert_type = TextType.CODE
-        case _:
+    if (delimiter != "**" and
+        delimiter != "_" and
+        delimiter != "`"):
             raise Exception("Given delimiter does not follow Markdown syntax")
 
     for node in old_nodes:
@@ -44,8 +41,55 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                 new_node = TextNode(subnode, current_type)
                 new_nodes.append(new_node)
                 if current_type == TextType.TEXT:
-                    current_type = insert_type
+                    current_type = text_type
                 else:
                     current_type = TextType.TEXT
+    return new_nodes
+
+def split_nodes_image(old_nodes):
+    new_nodes = []
+
+    for node in old_nodes:
+        if node.text_type != TextType.TEXT:
+            new_nodes.append(node)
+        else:
+            images = extract_markdown_images(node.text)
+            if not images and node:
+                new_nodes.append(node)
+            elif images:
+                text = node.text
+                for image in images:
+                    image_alt, image_url = image
+                    sections = text.split(f"![{image_alt}]({image_url})", 1)
+                    text = sections[1]
+                    new_nodes.extend([TextNode(sections[0], TextType.TEXT), TextNode(image_alt, TextType.IMAGE, image_url)])
 
     return new_nodes
+
+def split_nodes_links(old_nodes):
+    new_nodes = []
+
+    for node in old_nodes:
+        if node.text_type != TextType.TEXT:
+            new_nodes.append(node)
+        else:
+            links = extract_markdown_links(node.text)
+            if not links and node:
+                new_nodes.append(node)
+            elif links:
+                text = node.text
+                for link in links:
+                    link_anchor, link_url = link
+                    sections = text.split(f"[{link_anchor}]({link_url})", 1)
+                    text = sections[1]
+                    new_nodes.extend([TextNode(sections[0], TextType.TEXT), TextNode(link_anchor, TextType.LINK, link_url)])
+    
+    return new_nodes
+
+def extract_markdown_images(text):
+    matches = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
+    return matches
+
+def extract_markdown_links(text):
+    matches = re.findall(r"\[(.*?)\]\((.*?)\)", text)
+    return matches

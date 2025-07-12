@@ -32,7 +32,7 @@ class TestSplitNodeDelim(unittest.TestCase):
         self.assertEqual(html_node.to_html(), '<a href="www.testlink.com">This is a _LINK_ node</a>')
 
     def test_text(self):
-        print("***Testing plain text containing no delimiters***")
+        print("***Test plain text containing no delimiters***")
         node = TextNode("This is my text.  No delimiters here!", TextType.TEXT)
         nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
         #print(nodes[0])
