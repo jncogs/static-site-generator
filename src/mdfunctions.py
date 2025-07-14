@@ -28,14 +28,14 @@ def block_to_block_type(block):
     test = True
     split_block = block.split("\n")
     for split in split_block:
-        if not re.findall(r"^\>(.*?)", split):
+        if not re.findall(r"^\>(.*)", split):
             test = False
     if test:
         return BlockType.QUOTE
 
     test = True
     for split in split_block:
-        if not re.findall(r"^\- (.*?)", split):
+        if not re.findall(r"^- (.*)", split):
             test = False
     if test:
         return BlockType.UNORDERED_LIST

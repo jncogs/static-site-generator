@@ -65,7 +65,7 @@ def split_nodes_image(old_nodes):
                     new_nodes.extend([TextNode(sections[0], TextType.TEXT), TextNode(image_alt, TextType.IMAGE, image_url)])
                 if text:
                     new_nodes.append(TextNode(text, TextType.TEXT))
-
+    
     return new_nodes
 
 def split_nodes_links(old_nodes):
@@ -100,10 +100,11 @@ def extract_markdown_links(text):
 
 def text_to_textnodes(text):
     node = TextNode(text, TextType.TEXT)
-    output = split_nodes_delimiter([node], "**", TextType.BOLD)
-    output = split_nodes_delimiter(output, "_", TextType.ITALIC)
-    output = split_nodes_delimiter(output, "`", TextType.CODE)
+    output = [node]
     output = split_nodes_image(output)
     output = split_nodes_links(output)
+    output = split_nodes_delimiter(output, "**", TextType.BOLD)
+    output = split_nodes_delimiter(output, "_", TextType.ITALIC)
+    output = split_nodes_delimiter(output, "`", TextType.CODE)
 
     return output
