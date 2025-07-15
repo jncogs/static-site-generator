@@ -50,3 +50,23 @@ def block_to_block_type(block):
         return BlockType.ORDERED_LIST
     
     return BlockType.PARAGRAPH
+
+def extract_title(markdown):
+    title = None
+    blocks = markdown_to_blocks(markdown)
+    for block in blocks:
+        if block_to_block_type(block) == BlockType.HEADING:
+            title = re.findall(r"^\#{1} (.*)", block)
+        if title:
+            break
+    
+    if title:
+        return clean_md(title[0])
+    raise Exception("No title header in markdown")
+
+def clean_md(text):
+    cleaned_text = text.replace("**", "")
+    cleaned_text = cleaned_text.replace("_", "")
+    cleaned_text = cleaned_text.replace("`", "")
+
+    return cleaned_text
