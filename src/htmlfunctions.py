@@ -70,7 +70,7 @@ def __quote_to_html(block):
     for split in split_block:
         matches = re.findall(r"^\>(.*)", split)
 
-        nodes = text_to_textnodes("".join(matches[0]))
+        nodes = text_to_textnodes("".join(matches[0].strip()))
         for node in nodes:
             html_node = text_node_to_html_node(node)
             children.append(html_node.to_html())
