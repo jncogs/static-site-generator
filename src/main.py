@@ -69,26 +69,7 @@ def generate_page_recursive(dir_path_content, template_path, dest_dir_path):
             file_path = os.path.join(dir_path_content, dir)
             filename, extension = os.path.splitext(file_path)
             if extension == ".md":
-                print(f"Generating page from {file_path} to {dest_dir_path}, using {template_path}")
-                with open(file_path) as file:
-                    markdown = file.read()
-                
-                with open(template_path) as file:
-                    template = file.read()
-                
-                title = extract_title(markdown)
-                html_node = markdown_to_html_node(markdown)
-                content = html_node.to_html()
-
-                page = template.replace("{{ Title }}", title)
-                page = page.replace("{{ Content }}", content)
-
-                if not os.path.exists(dest_dir_path):
-                    os.mkdir(dest_dir_path)
-                
-                if page:
-                    with open(os.path.join(dest_dir_path, "index.html"), "w") as file:
-                        file.write(page)
+                generate_page(file_path, template_path, os.path.join(dest_dir_path, "index.html"))
         else:
             if not os.path.exists(os.path.join(dest_dir_path, dir)):
                 os.mkdir(os.path.join(dest_dir_path, dir))
